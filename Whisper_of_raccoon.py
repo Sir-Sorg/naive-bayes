@@ -33,6 +33,21 @@ def percentageFeature(features: dict):
     return features
 
 
+def findChance(sample: list, features: dict):
+    chance = 1
+    for column in range(0, 4):
+        chance *= features[column].get(sample[column])
+    chance *= features[4]
+    return chance
+
+
+def predict(sample: list, *lables):
+    result = list()
+    for lable in lables:
+        result.append(findChance(sample, lable))
+    return ' Male' if result[0] >= result[1] else ' Female'
+
+
 # Education     Status     Others      Skin Color     Sex
 fileAddres = './adult.csv'
 data = readData(fileAddres)
@@ -55,3 +70,7 @@ maleFeature = findFeature(male)
 femaleFeature = findFeature(female)
 maleFeature = percentageFeature(maleFeature)
 femaleFeature = percentageFeature(femaleFeature)
+
+# adding prior to key = 4 of dictionary
+maleFeature[4] = len(male)/len(trainingData)
+femaleFeature[4] = len(female)/len(trainingData)
