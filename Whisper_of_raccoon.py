@@ -36,7 +36,7 @@ def percentageFeature(features: dict):
 def findChance(sample: list, features: dict):
     chance = 1
     for column in range(0, 4):
-        chance *= features[column].get(sample[column])
+        chance *= features[column].get(sample[column], 0)
     chance *= features[4]
     return chance
 
@@ -48,12 +48,23 @@ def predict(sample: list, *lables):
     return ' Male' if result[0] >= result[1] else ' Female'
 
 
+def testing(testCase: list, *lables):
+    wrong = true = 0
+    for sample in testCase:
+        answer = predict(sample, *lables)
+        if answer == sample[4]:
+            true += 1
+        else:
+            wrong += 1
+    accurecy = true/(true+wrong)
+    accurecy *= 100
+    return accurecy
+
+
 # Education     Status     Others      Skin Color     Sex
 fileAddres = './adult.csv'
 data = readData(fileAddres)
-print(len(data))
 data = cleanData(data)
-print(len(data))
 
 # learn percent = 70% and test = 30% --> lentgh * 0.3 and lentgh * 0.7 !!!
 trainTestBorder = round(len(data)*0.7)
@@ -74,3 +85,6 @@ femaleFeature = percentageFeature(femaleFeature)
 # adding prior to key = 4 of dictionary
 maleFeature[4] = len(male)/len(trainingData)
 femaleFeature[4] = len(female)/len(trainingData)
+
+print(
+    f'Accurecy is {testing(testingData, maleFeature, femaleFeature):.2f} % .')
