@@ -14,6 +14,16 @@ def cleanData(data):
     return list(filter(lambda thisList: False if ' ?' in thisList else True, data))
 
 
+def findFeature(data: list):
+    features = dict()
+    for column in range(4):
+        feature = dict()
+        for sample in data:
+            feature[sample[column]] = feature.get(sample[column], 0)+1
+        features[column] = feature
+    return features
+
+
 # Education     Status     Others      Skin Color     Sex
 fileAddres = './adult.csv'
 data = readData(fileAddres)
@@ -25,3 +35,11 @@ print(len(data))
 trainTestBorder = round(len(data)*0.7)
 trainingData = data[1:trainTestBorder]
 testingData = data[trainTestBorder:]
+
+# divide data into male and female list
+male = list(
+    filter(lambda thisList: True if thisList[4] == ' Male' else False, trainingData))
+female = list(
+    filter(lambda thisList: True if thisList[4] == ' Female' else False, trainingData))
+
+print(findFeature(male))
