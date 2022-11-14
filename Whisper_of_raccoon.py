@@ -24,6 +24,15 @@ def findFeature(data: list):
     return features
 
 
+def percentageFeature(features: dict):
+    for column in features:
+        feature = features[column]
+        totalCount = sum(feature.values())
+        for Key in feature:
+            feature[Key] /= totalCount
+    return features
+
+
 # Education     Status     Others      Skin Color     Sex
 fileAddres = './adult.csv'
 data = readData(fileAddres)
@@ -42,4 +51,7 @@ male = list(
 female = list(
     filter(lambda thisList: True if thisList[4] == ' Female' else False, trainingData))
 
-print(findFeature(male))
+maleFeature = findFeature(male)
+femaleFeature = findFeature(female)
+maleFeature = percentageFeature(maleFeature)
+femaleFeature = percentageFeature(femaleFeature)
